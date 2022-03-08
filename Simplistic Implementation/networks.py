@@ -15,7 +15,7 @@ def condensing_layer(input_dim, output_dim, dropout=0.25):
         )
 
 
-def expanding_layer(input_dim,output_dim,dropout=0.25):
+def expanding_layer(input_dim,output_dim, dropout=0.25):
     return nn.Sequential(
         nn.Upsample(scale_factor=2,mode="bilinear"),
         nn.Conv2d(input_dim, output_dim,kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)),
