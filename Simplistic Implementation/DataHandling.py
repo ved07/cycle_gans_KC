@@ -9,7 +9,7 @@ path = path.split("\\")[:-1]
 path.append("Data")
 path = "".join([item+"/" for item in path])
 
-transform = [transforms.ToTensor(), transforms.CenterCrop((370, 1224))]
+transform = [transforms.ToTensor(), transforms.CenterCrop((256, 1024))]
 
 
 class Compose(object):
