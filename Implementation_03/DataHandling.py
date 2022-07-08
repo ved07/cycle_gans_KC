@@ -2,6 +2,7 @@
 from pathlib import Path
 import os
 import matplotlib.pyplot as plt
+import torch
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
@@ -9,7 +10,7 @@ from torchvision.utils import save_image
 import random
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
-BATCH_SIZE = 8
+BATCH_SIZE = 4
 path = Path().parent.absolute().__str__()
 path = path.split("\\")[:-1]
 carla_path = path
@@ -30,7 +31,7 @@ class Compose:
 
 
 
-composed_transforms = Compose([transforms.ToTensor(), transforms.CenterCrop((256, 1024)),  # transforms.Resize  64, 256
+composed_transforms = Compose([transforms.ToTensor(), transforms.CenterCrop((256, 256)),  # transforms.Resize  64, 256
                                ])
 Kitti_Dataset = datasets.Kitti(root=path, transforms=composed_transforms)
 Kitti_DataLoader = DataLoader(Kitti_Dataset, batch_size=BATCH_SIZE, shuffle=True)
@@ -45,9 +46,11 @@ class CarlaCompose:
         return image
 
 
-carla_transforms = CarlaCompose([transforms.ToTensor(), transforms.CenterCrop((256, 1024)),  # transforms.Resize 64, 256
+carla_transforms = CarlaCompose([transforms.ToTensor(), transforms.CenterCrop((256, 256)),  # transforms.Resize 64, 256
                                  ])
 
 Carla_Dataset = datasets.ImageFolder(carla_path, transform=carla_transforms)
 
 Carla_Dataloader = DataLoader(Carla_Dataset, batch_size=BATCH_SIZE, shuffle=True)
+
+

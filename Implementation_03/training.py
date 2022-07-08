@@ -13,7 +13,7 @@ device = torch.device('cuda')
 
 
 print(torch.cuda.is_available())
-input_shape = (256, 1024)
+input_shape = (256, 256)
 Sim2RealDiscriminator = networks.Discriminator(input_shape=input_shape).to(device)
 Sim2RealGenerator = networks.Generator().to(device)
 Real2SimDiscriminator = networks.Discriminator(input_shape=input_shape).to(device)
@@ -30,7 +30,7 @@ os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
 
 # Define the constants
 NumEpochs = 200
-lr = 0.0001
+lr = 0.00001
 # Optimizers
 Sim2RealGeneratorOptimizer = torch.optim.Adam(params=Sim2RealGenerator.parameters(), lr=lr)
 Sim2RealDiscriminatorOptimizer = torch.optim.Adam(params=Sim2RealDiscriminator.parameters(), lr=lr)
@@ -48,7 +48,7 @@ gen_lambda = 1
 
 
 def get_disc_loss(disc, fake, real, criterion):
-    fakeYHat = disc(fake.detach())
+    fakeYHat = disc(fake)
     fakeLoss = criterion(fakeYHat, torch.zeros_like(fakeYHat))
     realYHat = disc(real)
     realLoss = criterion(realYHat, torch.ones_like(realYHat))
@@ -57,6 +57,7 @@ def get_disc_loss(disc, fake, real, criterion):
 
 def get_gen_loss(disc, fake, criterion):
     discFake = disc(fake)
+    print(discFake.shape)
     loss = criterion(discFake, torch.ones_like(discFake))
     return loss
 
@@ -86,7 +87,7 @@ for epoch in range(NumEpochs):
         Sim2RealDiscriminatorOptimizer.zero_grad()
 
         Sim2RealDiscLoss = get_disc_loss(Sim2RealDiscriminator,
-                                         fake=realFake, real=RealData.detach(),
+                                         fake=realFake.detach(), real=RealData,
                                          criterion=advCriterion)
         Sim2RealDiscLoss.backward()
         Sim2RealDiscriminatorOptimizer.step()
@@ -95,8 +96,8 @@ for epoch in range(NumEpochs):
         Real2SimDiscriminatorOptimizer.zero_grad()
 
         Real2SimDiscLoss = get_disc_loss(Real2SimDiscriminator,
-                                         fake=simFake,
-                                         real=SimData.detach(), criterion=advCriterion)
+                                         fake=simFake.detach(),
+                                         real=SimData, criterion=advCriterion)
         Real2SimDiscLoss.backward()
         Real2SimDiscriminatorOptimizer.step()
 
@@ -112,10 +113,10 @@ for epoch in range(NumEpochs):
         Sim2RealGeneratorLoss = gen_lambda * get_gen_loss(disc=Sim2RealDiscriminator,
                                                           fake=realFake, criterion=advCriterion)
 
-        #  Real2SimGeneratorLoss = gen_lambda * get_gen_loss(disc=Real2SimDiscriminator,fake=simFake,
-        #  criterion=advCriterion)
+        Real2SimGeneratorLoss = gen_lambda * get_gen_loss(disc=Real2SimDiscriminator,fake=simFake,
+          criterion=advCriterion)
 
-        TotalGenLoss = (Sim2RealGeneratorLoss +  # Real2SimGeneratorLoss
+        TotalGenLoss = (Sim2RealGeneratorLoss +  Real2SimGeneratorLoss
                         # + SimIdentityLoss + RealIdentityLoss
                         + SimCycleConsistencyLoss + RealCycleConsistencyLoss)
 

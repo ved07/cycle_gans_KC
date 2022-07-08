@@ -1,5 +1,7 @@
 # import dependencies
 from pathlib import Path
+
+import torch.utils.data
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
@@ -20,10 +22,15 @@ class Compose:
         return image, 1
 
 
-composed_transforms = Compose([transforms.ToTensor(), transforms.RandomCrop((256, 1024))])
+composed_transforms = Compose([transforms.ToTensor(), transforms.CenterCrop((256, 1024))])
 Kitti_Dataset = datasets.Kitti(root=path, transforms=composed_transforms)
+Kitti_Train, Kitti_Test = torch.utils.data.random_split(Kitti_Dataset, [int(3*len(Kitti_Dataset)/10), len(Kitti_Dataset) - int(3*len(Kitti_Dataset)/10)])
 
 
-def Kitti_DataLoader(batch_size):
-    return DataLoader(Kitti_Dataset, batch_size=batch_size, shuffle=True)
+def Kitti_DataLoader_Train(batch_size):
+    return DataLoader(Kitti_Train, batch_size=batch_size, shuffle=True)
+
+def Kitti_DataLoader_Test(batch_size):
+    return DataLoader(Kitti_Test, batch_size=batch_size, shuffle=True)
+
 

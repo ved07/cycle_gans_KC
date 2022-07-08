@@ -112,10 +112,10 @@ for epoch in range(NumEpochs):
         Sim2RealGeneratorLoss = gen_lambda * get_gen_loss(disc=Sim2RealDiscriminator,
                                                           fake=realFake, criterion=advCriterion)
 
-        #  Real2SimGeneratorLoss = gen_lambda * get_gen_loss(disc=Real2SimDiscriminator,fake=simFake,
-        #  criterion=advCriterion)
+        Real2SimGeneratorLoss = gen_lambda * get_gen_loss(disc=Real2SimDiscriminator,fake=simFake,
+          criterion=advCriterion)
 
-        TotalGenLoss = (Sim2RealGeneratorLoss +  # Real2SimGeneratorLoss
+        TotalGenLoss = (Sim2RealGeneratorLoss +  Real2SimGeneratorLoss
                         # + SimIdentityLoss + RealIdentityLoss
                         + SimCycleConsistencyLoss + RealCycleConsistencyLoss)
 
