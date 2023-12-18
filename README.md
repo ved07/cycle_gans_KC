@@ -1,3 +1,4 @@
+# CycleGANs King's Certificate Project
 This project is my King's Certificate Research Project submitted in 2022, although the project was a collaborative effort, a majority of the write-up (linked at the bottom of this ReadMe) and the all the code, is my own creation.
 ## Objective
 To take images from a simulated environment, and convert them into realistic training data, ideally using GANs.
@@ -14,7 +15,9 @@ It was obvious that the model did not have sufficient parameters to learn, and t
 ![image](https://github.com/ved07/cycle_gans_KC/assets/49959052/6496b416-3003-4254-92bd-0315487f9c8b)
 
 The results produced noisy checkerboard patterns.
+
 ![image](https://github.com/ved07/cycle_gans_KC/assets/49959052/8328a067-60b8-437a-b9d3-e6d0eb4982d7)
+
 ![image](https://github.com/ved07/cycle_gans_KC/assets/49959052/a7bfabb5-3eec-43ca-bb9a-46545738070e)
 
 
@@ -44,7 +47,7 @@ However, the results did have some of the key colours and features present in th
 
 ![image](https://github.com/ved07/cycle_gans_KC/assets/49959052/e7bf88ee-f5cf-40d8-8975-c82c151dd5ce)
 
-### Remarks
+## Final Remarks
 The final results show some sembelance of the output domain, however, it is evident that key features are not being "understood" by the model, for example cars, buildings and roads. Looking into the subset of the Kitti dataset selected, it is noticeable that the data does not contain many urban-esque images, whereas Carla is situated entirely within an urban environment.  
 
-### Link to our paper: https://drive.google.com/file/d/1ntK0YxXOk12dFYaksXYfsR051rMu1iZi/view
+## Link to our paper: https://drive.google.com/file/d/1ntK0YxXOk12dFYaksXYfsR051rMu1iZi/view
